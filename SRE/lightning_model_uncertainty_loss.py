@@ -24,7 +24,10 @@ class LightningModel(pl.LightningModule):
             'Wav2vec2BiEncoderAgeEstimation': Wav2vec2BiEncoderAgeEstimation,
         }
         
-        self.model = self.models[HPARAMS['model_type']](upstream_model=HPARAMS['upstream_model'], num_layers=HPARAMS['num_layers'], feature_dim=HPARAMS['feature_dim'])
+        self.model = self.models[HPARAMS['model_type']](
+                                                        pretrained_upstream_path=HPARAMS['pretrained_upstream_path'], 
+                                                        num_layers=HPARAMS['num_layers'], feature_dim=HPARAMS['feature_dim']
+                                                    )
             
         self.mae_criterion = MAE()
         self.rmse_criterion = RMSELoss()
