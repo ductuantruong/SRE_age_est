@@ -23,7 +23,7 @@ class ModelConfig(object):
     # UncertaintyLoss
     loss = "UncertaintyLoss"
     
-    pretrained_upstream_path = config['model_parameters']['pretrained_upstream_path']
+    upstream_model = config['model_parameters']['upstream_model']
 
     # number of layers in encoder (transformers)
     num_layers = 6

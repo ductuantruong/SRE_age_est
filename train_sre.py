@@ -54,7 +54,7 @@ if __name__ == "__main__":
     parser.add_argument('--dev', type=str, default=False)
     parser.add_argument('--model_checkpoint', type=str, default=ModelConfig.model_checkpoint)
     parser.add_argument('--model_type', type=str, default=ModelConfig.model_type)
-    parser.add_argument('--pretrained_upstream_path', type=str, default=ModelConfig.pretrained_upstream_path)
+    parser.add_argument('--upstream_model', type=str, default=ModelConfig.upstream_model)
     parser.add_argument('--run_name', type=str, default=ModelConfig.run_name)
     
     parser = pl.Trainer.add_argparse_args(parser)

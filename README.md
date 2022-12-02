@@ -23,24 +23,10 @@ You can use the script to prepare all the data, but it may take a long time to g
 bash scripts/prepare_wav_file.sh
 ```
 
-## Fine-tuning wav2vec 2.0
-### Download pretrained wav2vec2 model
-Instead of training from scratch, we download and use english wav2vec model for weight initialization. This pratice can be apply to all languages.
+## Upsample wav files
+Because most of SSL upstream models are trained on 16kHz audio files. However, SRE08/10 audios are only in 8kHz. Therefore, we need to upsample them by running the following script.
 ```
-wget https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt
-```
-### Use new data to finetune orignal wav2vec2 model
-```
-python3 finetune_w2v2/pretrain.py --fairseq_path finetune_w2v2/fairseq/ --audio_path data/train/wav_path --init_model wav2vec_small.pt
-```
-After the training, you can find an 
-Example:
-```
-outputs/2021-09-02/00-04-52/checkpoints/checkpoint_best.pt
-```
-Move the finetuned wav2vec 2.0 to the project directory:
-```
-mv finetune_w2v2/outputs/2021-09-02/00-04-52/checkpoints/checkpoint_best.pt $PWD/sre_50epchs_finetuned_w2v2.pt
+python SRE/upsample.sh
 ```
 
 ## Usage
@@ -74,7 +60,7 @@ python test_sre.py --data_path=data/ --model_checkpoint=checkpoints/epoch=7-step
 ```
 
 ### Pretrained Model
-We have uploaded a pretrained model of our experiments. You can download the from [Dropbox](https://www.dropbox.com/s/xkijgjhlht5pfd1/epoch%3D7-step%3D13647.ckpt?dl=0).
+We have uploaded a pretrained model of our experiments. You can download the from [OneDrive](https://entuedu-my.sharepoint.com/:f:/g/personal/ductuan001_e_ntu_edu_sg/EuH_IItaGnFPj4O9nqd5190Bk39DX3CYAc0h3bu5wn3ppQ?e=AatgN2).
 
 Download it and put it into the model_checkpoint folder.
 

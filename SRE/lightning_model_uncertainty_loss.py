@@ -25,7 +25,7 @@ class LightningModel(pl.LightningModule):
         }
         
         self.model = self.models[HPARAMS['model_type']](
-                                                        pretrained_upstream_path=HPARAMS['pretrained_upstream_path'], 
+                                                        upstream_model=HPARAMS['upstream_model'], 
                                                         num_layers=HPARAMS['num_layers'], feature_dim=HPARAMS['feature_dim']
                                                     )
             
