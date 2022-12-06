@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # Testing Dataset
     test_set = SREDataset(
         hparams = hparams,
-        data_type='test',
+        data_type='test_16k',
         is_train=False
     )
 

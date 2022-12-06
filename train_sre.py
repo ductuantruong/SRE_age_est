@@ -70,7 +70,7 @@ if __name__ == "__main__":
     ## Training Dataset
     train_set = SREDataset(
         hparams = hparams,
-        data_type = 'train',
+        data_type = 'train_16k',
         is_train = True
     )
     ## Training DataLoader
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     ## Validation Dataset
     valid_set = SREDataset(
         hparams = hparams,
-        data_type = 'valid',
+        data_type = 'valid_16k',
         is_train = False
     )
     ## Validation Dataloader
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     ## Testing Dataset
     test_set = SREDataset(
         hparams = hparams,
-        data_type = 'test',
+        data_type = 'test_16k',
         is_train = False
     )
     ## Testing Dataloader
