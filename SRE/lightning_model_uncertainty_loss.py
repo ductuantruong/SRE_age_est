@@ -57,15 +57,17 @@ class LightningModel(pl.LightningModule):
         return [optimizer]
 
     def training_step(self, batch, batch_idx):
-        utt_id, x, y_a, y_g, x_len = batch
+        utt_id, x, y_a, y_g, x_len, weight = batch
         y_a = torch.stack(y_a).reshape(-1,)
         y_g = torch.stack(y_g).reshape(-1,)
+        weight = torch.stack(weight).reshape(-1,)
         
         y_hat_a, y_hat_g = self(x, x_len)
         y_a, y_g = y_a.view(-1).float(), y_g.view(-1).float()
         y_hat_a, y_hat_g = y_hat_a.view(-1).float(), y_hat_g.view(-1).float()
+        weight = weight.view(-1).float()
 
-        loss, mse_loss = self.uncertainty_loss(torch.cat((y_hat_a, y_hat_g)), torch.cat((y_a, y_g)))
+        loss, mse_loss = self.uncertainty_loss(torch.cat((y_hat_a, y_hat_g)), torch.cat((y_a, y_g)), weight)
 
         age_mae =self.mae_criterion(y_hat_a*self.a_std+self.a_mean, y_a*self.a_std+self.a_mean)
         gender_acc = self.accuracy((y_hat_g>0.5).long(), y_g.long())
@@ -86,15 +88,17 @@ class LightningModel(pl.LightningModule):
         self.log('train/g',gender_acc, on_step=False, on_epoch=True, prog_bar=True)
 
     def validation_step(self, batch, batch_idx):
-        utt_id, x, y_a, y_g, x_len = batch
+        utt_id, x, y_a, y_g, x_len, weight = batch
         y_a = torch.stack(y_a).reshape(-1,)
         y_g = torch.stack(y_g).reshape(-1,)
+        weight = torch.stack(weight).reshape(-1,)
         
         y_hat_a, y_hat_g = self(x, x_len)
         y_a, y_g = y_a.view(-1).float(), y_g.view(-1).float()
         y_hat_a, y_hat_g = y_hat_a.view(-1).float(), y_hat_g.view(-1).float()
+        weight = weight.view(-1).float()
 
-        loss, mse_loss = self.uncertainty_loss(torch.cat((y_hat_a, y_hat_g)), torch.cat((y_a, y_g)))
+        loss, mse_loss = self.uncertainty_loss(torch.cat((y_hat_a, y_hat_g)), torch.cat((y_a, y_g)), weight)
 
         age_mae = self.mae_criterion(y_hat_a*self.a_std+self.a_mean, y_a*self.a_std+self.a_mean)
         gender_acc = self.accuracy((y_hat_g>0.5).long(), y_g.long())

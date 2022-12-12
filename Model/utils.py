@@ -11,6 +11,14 @@ class RMSELoss(nn.Module):
         
     def forward(self,yhat,y):
         return torch.sqrt(self.mse(yhat,y))
+
+class WMSELoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+        
+    def forward(self, input, target, weight):
+        return (weight * (target - input) ** 2).mean()
+
 class UncertaintyLossAG(Module):
     def __init__(self):
         super(UncertaintyLossAG, self).__init__()
@@ -19,8 +27,9 @@ class UncertaintyLossAG(Module):
         self.loss_gender = None
         self.log_var_age = Parameter(torch.tensor(0, requires_grad=True, dtype=torch.float32, device=device))
         self.log_var_gender = Parameter(torch.tensor(0, requires_grad=True, dtype=torch.float32, device=device))
+        self.wmse_loss = WMSELoss()
 
-    def forward(self, input, target):
+    def forward(self, input, target, weight):
         pred_arr = torch.split(input, input.shape[0]//2)
         age_pred, gender_pred = pred_arr
 
@@ -30,7 +39,7 @@ class UncertaintyLossAG(Module):
         self.loss_gender = mse_loss(input=gender_pred, target=gender_target)
         self.loss_gender_var = torch.exp(-self.log_var_gender) * self.loss_gender + self.log_var_gender
 
-        self.loss_age = mse_loss(input=age_pred, target=age_target)
+        self.loss_age = self.wmse_loss(input=age_pred, target=age_target, weight=weight)
         self.loss_age_var = torch.exp(-self.log_var_age) * self.loss_age + self.log_var_age
 
         self.loss = self.loss_age
