@@ -2,7 +2,7 @@
     "model_name": "Wav2vec2BiEncoder",
     "dataDir": {
         "dir": "",
-        "data_path": "data",
+        "data_path": "/home/project/12001458/ductuan0/ISCAP_Age_Estimation/data/NIST_SRE_Corpus",
         "speaker_csv_path": "Dataset/data_info_age.csv"
     },
     "model_parameters": {
